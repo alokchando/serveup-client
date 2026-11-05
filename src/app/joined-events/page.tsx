@@ -118,7 +118,7 @@ const JoinedEvents = async () => {
             </h2>
 
             <p className="text-slate-500 dark:text-slate-400 mt-3">
-              You haven't joined any events. Explore upcoming events and be part of something meaningful.
+              You haven&apos;t joined any events. Explore upcoming events and be part of something meaningful.
             </p>
 
             <Link
