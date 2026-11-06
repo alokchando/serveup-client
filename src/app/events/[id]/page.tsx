@@ -29,7 +29,7 @@ const EventDetailsPage = async ({
   }
 
   // Fetch event details
-  const response = await fetch(`http://localhost:3001/events/${id}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/events/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -44,7 +44,7 @@ const EventDetailsPage = async ({
 
   if (session?.user?.email) {
     const joinedResponse = await fetch(
-      `http://localhost:3001/events/joined/${encodeURIComponent(session.user.email)}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/events/joined/${encodeURIComponent(session.user.email)}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

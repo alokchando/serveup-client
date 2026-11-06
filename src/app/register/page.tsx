@@ -63,12 +63,6 @@ export default function RegisterPage() {
     toast.success("Account created successfully!");
 
     router.push("/");
-    // TODO: Add your registration authentication logic here.
-    // 1. Get name, email, photoURL, and password from FormData.
-    // 2. Send the information to your authentication provider.
-    // 3. Handle registration errors, such as an existing email.
-
-    // 4. Redirect the user after successful registration.
   }
   const handleGoogleSignup = async () => {
     const { error } = await authClient.signIn.social({

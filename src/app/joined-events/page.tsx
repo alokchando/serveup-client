@@ -1,13 +1,8 @@
-
 import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import {
-  CalendarDays,
-  MapPin,
-  ArrowUpRight,
-} from "lucide-react";
+import { CalendarDays, MapPin, ArrowUpRight } from "lucide-react";
 
 type JoinedEvent = {
   _id: string;
@@ -63,7 +58,7 @@ const JoinedEvents = async () => {
 
   // Fetch events joined by this user
   const response = await fetch(
-    `http://localhost:3001/events/joined/${encodeURIComponent(session.user.email)}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/events/joined/${encodeURIComponent(session.user.email)}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -81,7 +76,6 @@ const JoinedEvents = async () => {
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <div className="max-w-7xl mx-auto px-5 py-16">
-
         {/* Page Header */}
         <div className="mb-12">
           <p className="text-sm font-semibold tracking-widest uppercase text-sky-500 mb-3">

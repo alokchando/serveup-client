@@ -5,14 +5,14 @@ import { EventItem } from "@/lib/type";
 
 const RecentEvents = async () => {
   const response = await fetch(
-    `http://localhost:3001/events/recent`
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/events/recent`,
   );
 
   if (!response.ok) {
     throw new Error("Failed to fetch recent events");
   }
 
-  const events:EventItem[] = await response.json();
+  const events: EventItem[] = await response.json();
 
   return (
     <section className="container mx-auto px-4 py-16">
@@ -26,11 +26,9 @@ const RecentEvents = async () => {
           </p>
         </div>
 
-          <Link href="/upcoming-events">
-        <Button  variant="outline">
-          View All Events
-        </Button>
-          </Link>
+        <Link href="/upcoming-events">
+          <Button variant="outline">View All Events</Button>
+        </Link>
       </div>
 
       {events.length > 0 ? (

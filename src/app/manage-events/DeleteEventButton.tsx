@@ -23,7 +23,7 @@ const DeleteEventButton = ({
      const token = await getTokenFromClient()
 
     const response = await fetch(
-      `http://localhost:3001/events/${id}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL }/events/${id}`,
       {
         method: "DELETE",
         headers: {

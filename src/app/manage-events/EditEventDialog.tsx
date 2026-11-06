@@ -104,7 +104,7 @@ const EditEventDialog = ({
 
     try {
       const response = await fetch(
-        `http://localhost:3001/events/${event._id}`,
+        `${process.env.NEXT_PUBLIC_SERVER_URL }/events/${event._id}`,
         {
           method: "PATCH",
           headers: {

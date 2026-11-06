@@ -47,7 +47,7 @@ const ManageEvents = async () => {
 
   // Fetch events created by logged-in user
   const response = await fetch(
-    `http://localhost:3001/events/my-events/${encodeURIComponent(userEmail)}`,
+    `${process.env.NEXT_PUBLIC_SERVER_URL }/events/my-events/${encodeURIComponent(userEmail)}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,

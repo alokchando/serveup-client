@@ -2,7 +2,7 @@ import { EventItem } from "@/lib/type";
 import EventList from "@/components/event-list";
 
 const UpComingEvents = async () => {
-  const response = await fetch("http://localhost:3001/events/upcoming");
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/events/upcoming`);
 
   if (!response.ok) {
     throw new Error("Failed to fetch events");

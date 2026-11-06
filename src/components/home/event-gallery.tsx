@@ -3,15 +3,14 @@ import Image from "next/image";
 
 const PastEventGallery = async () => {
   const response = await fetch(
-    `http://localhost:3001/events/pastevents`
-   
+    `${process.env.NEXT_PUBLIC_SERVER_URL}/events/pastevents`,
   );
 
   if (!response.ok) {
     throw new Error("Failed to fetch event gallery");
   }
 
-  const events:EventItem[] = await response.json();
+  const events: EventItem[] = await response.json();
 
   return (
     <section className="container mx-auto px-4 py-16">
@@ -43,9 +42,7 @@ const PastEventGallery = async () => {
               <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/70 via-transparent to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <div className="text-white">
                   <h3 className="font-semibold">{event.title}</h3>
-                  <p className="text-sm text-white/80">
-                    {event.category}
-                  </p>
+                  <p className="text-sm text-white/80">{event.category}</p>
                 </div>
               </div>
             </div>
