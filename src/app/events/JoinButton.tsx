@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import { toast } from "react-toastify";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 const JoinButton = ({
   eventId,
@@ -18,12 +19,13 @@ const JoinButton = ({
 
   const handleJoin = async () => {
 
-
+     const token = await getTokenFromClient()
 
     const response = await fetch(`http://localhost:3001/events/${eventId}/join`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${token}`
       },
       body: JSON.stringify({
         eventId,

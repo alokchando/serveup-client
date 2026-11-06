@@ -15,8 +15,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "react-toastify";
-
-
+import { useSession } from "@/lib/auth-client";
+import { getTokenFromClient } from "@/lib/getTokenFromClient";
 
 const categories = [
   "Environment",
@@ -30,6 +30,7 @@ const categories = [
 
 export default function CreateEventPage() {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -53,12 +54,16 @@ export default function CreateEventPage() {
       image: String(formData.get("thumbnailImageUrl")),
       location: String(formData.get("location")),
       eventDate: selectedDate,
+      creatorName: session?.user.name,
+      creatorEmail: session?.user.email,
     };
 
-    const response = await fetch('http://localhost:3001/events', {
+     const token = await getTokenFromClient()
+    const response = await fetch("http://localhost:3001/events", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${token}`
       },
       credentials: "include",
       body: JSON.stringify(eventData),
@@ -70,8 +75,8 @@ export default function CreateEventPage() {
     }
 
     toast.success("Event created successfully!");
-    router.push("/events");
-    router.refresh();
+    // router.replace("/events");
+
   };
 
   return (
@@ -252,13 +257,15 @@ export default function CreateEventPage() {
             <div className="mt-8 flex flex-col-reverse gap-3 border-t border-border pt-6 sm:flex-row sm:justify-end">
               <button
                 type="button"
-                onClick={() => router.push("/events")}
+                onClick={() => router.push("/upcoming-events")}
                 className="rounded-xl border border-border px-6 py-3 text-sm font-medium transition hover:bg-muted"
               >
                 Cancel
               </button>
 
               <button
+                onClick={() => router.push("/upcoming-events")}
+
                 type="submit"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-sky-600"
               >

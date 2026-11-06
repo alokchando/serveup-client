@@ -3,7 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { CalendarDays, MapPin, ArrowUpRight } from "lucide-react";
+import {
+  CalendarDays,
+  MapPin,
+  ArrowUpRight,
+} from "lucide-react";
 
 type JoinedEvent = {
   _id: string;
@@ -16,19 +20,63 @@ type JoinedEvent = {
 
 const JoinedEvents = async () => {
   // Get logged-in user
+  const requestHeaders = await headers();
+
   const session = await auth.api.getSession({
-    headers: await headers(),
+    headers: requestHeaders,
   });
+
+  // Check login
+  if (!session?.user?.email) {
+    return (
+      <main className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-5">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+            Please Login First
+          </h1>
+
+          <p className="mt-3 text-slate-500 dark:text-slate-400">
+            Login to see the events you have joined.
+          </p>
+
+          <Link
+            href="/login"
+            className="inline-flex mt-6 px-6 py-3 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-semibold"
+          >
+            Login
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  // Get JWT token from Better Auth
+  const tokenResponse = await auth.api.getToken({
+    headers: requestHeaders,
+  });
+
+  const token = tokenResponse?.token;
+
+  if (!token) {
+    throw new Error("Authentication token not found");
+  }
 
   // Fetch events joined by this user
   const response = await fetch(
-    `http://localhost:3001/events/joined/${session?.user?.email}`,
+    `http://localhost:3001/events/joined/${encodeURIComponent(session.user.email)}`,
     {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
       cache: "no-store",
-    }
+    },
   );
 
-  const events = await response.json();
+  if (!response.ok) {
+    throw new Error("Failed to fetch joined events");
+  }
+
+  const events: JoinedEvent[] = await response.json();
 
   return (
     <main className="min-h-screen bg-slate-50 dark:bg-slate-950">
@@ -54,7 +102,7 @@ const JoinedEvents = async () => {
         {/* Event Cards */}
         {events.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {events.map((event: JoinedEvent) => (
+            {events.map((event) => (
               <div
                 key={event._id}
                 className="group bg-white dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 hover:border-sky-400 dark:hover:border-sky-500 hover:shadow-xl transition-all duration-300"
@@ -65,6 +113,7 @@ const JoinedEvents = async () => {
                     src={event.image}
                     alt={event.title}
                     fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
 
@@ -77,7 +126,6 @@ const JoinedEvents = async () => {
 
                 {/* Event Information */}
                 <div className="p-6">
-
                   <h2 className="text-xl font-bold text-slate-900 dark:text-white line-clamp-1">
                     {event.title}
                   </h2>
@@ -89,7 +137,9 @@ const JoinedEvents = async () => {
 
                   <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 mt-3">
                     <CalendarDays size={17} className="text-sky-500 shrink-0" />
-                    <span>{new Date(event.eventDate).toLocaleDateString()}</span>
+                    <span>
+                      {new Date(event.eventDate).toLocaleDateString()}
+                    </span>
                   </div>
 
                   {/* View Event Button */}
@@ -100,7 +150,6 @@ const JoinedEvents = async () => {
                     View Event
                     <ArrowUpRight size={18} />
                   </Link>
-
                 </div>
               </div>
             ))}
@@ -108,17 +157,15 @@ const JoinedEvents = async () => {
         ) : (
           /* Empty State */
           <div className="text-center py-24 px-5 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
-            <CalendarDays
-              size={48}
-              className="mx-auto text-sky-500 mb-5"
-            />
+            <CalendarDays size={48} className="mx-auto text-sky-500 mb-5" />
 
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
               No Joined Events Yet
             </h2>
 
             <p className="text-slate-500 dark:text-slate-400 mt-3">
-              You haven&apos;t joined any events. Explore upcoming events and be part of something meaningful.
+              You haven&apos;t joined any events. Explore upcoming events and be
+              part of something meaningful.
             </p>
 
             <Link
@@ -130,7 +177,6 @@ const JoinedEvents = async () => {
             </Link>
           </div>
         )}
-
       </div>
     </main>
   );

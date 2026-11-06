@@ -22,18 +22,9 @@ import { useRouter } from "next/navigation";
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
-  // TODO: Connect your authentication provider here.
-  // Add loading and error states when implementing authentication.
-
   const router = useRouter();
   async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    // TODO: Implement email/password authentication.
-    // 1. Read email and password using FormData.
-    // 2. Send credentials to your authentication provider.
-    // 3. Handle invalid credentials and server errors.
-    // 4. Redirect the user after successful login.
 
     const formData = new FormData(event.currentTarget);
 

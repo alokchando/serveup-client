@@ -1,4 +1,6 @@
+
 "use client";
+
 import Link from "next/link";
 import {
   CalendarDays,
@@ -8,8 +10,6 @@ import {
   LogIn,
   LogOut,
   ChevronDown,
-  Sun,
-  Moon,
 } from "lucide-react";
 import Image from "next/image";
 import { signOut, useSession } from "@/lib/auth-client";
@@ -18,13 +18,12 @@ import { useRouter } from "next/navigation";
 import ThemeToggle from "../theme-toggle";
 
 const Navbar = () => {
-  // TODO: Replace these demo values with your authentication session.
-  // const isLoggedIn = !!session?.user;
-  // const user = session?.user;
-  const { data: session } = useSession();
-  const router = useRouter()
+  const { data: session, isPending } = useSession();
+  const router = useRouter();
+
   const isLoggedIn = !!session?.user;
   const user = session?.user;
+
   const handleLogout = async () => {
     const { error } = await signOut();
 
@@ -35,12 +34,13 @@ const Navbar = () => {
 
     toast.success("Logout successfully!");
     router.push("/login");
-  router.refresh();
+    router.refresh();
   };
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl dark:border-slate-800/70 dark:bg-slate-950/80">
       <nav className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-sky-500 text-white shadow-sm shadow-sky-500/20">
@@ -54,6 +54,7 @@ const Navbar = () => {
 
         {/* Navigation Actions */}
         <div className="flex items-center gap-2 sm:gap-3">
+
           {/* Upcoming Events */}
           <Link
             href="/upcoming-events"
@@ -62,11 +63,17 @@ const Navbar = () => {
             Upcoming Events
           </Link>
 
-        <ThemeToggle/>
+          <ThemeToggle />
 
           {/* Conditional Authentication */}
-          {!isLoggedIn ? (
-            // TODO: Connect to your authentication login route.
+
+          {isPending ? (
+            // Loading Spinner
+            <div className="flex h-10 w-10 items-center justify-center">
+              <span className="loading loading-spinner loading-sm text-sky-500"></span>
+            </div>
+          ) : !isLoggedIn ? (
+            // Login Button
             <Link
               href="/login"
               className="inline-flex h-10 items-center gap-2 rounded-full bg-sky-500 px-5 text-sm font-semibold text-white shadow-sm shadow-sky-500/20 transition-all hover:bg-sky-600 hover:shadow-md"
@@ -75,12 +82,14 @@ const Navbar = () => {
               <span>Login</span>
             </Link>
           ) : (
+            // Logged In User
             <div className="dropdown dropdown-end">
+
               {/* Profile Picture & Display Name */}
               <div
                 tabIndex={0}
                 role="button"
-                title={user?.name}
+                title={user?.name || "Profile"}
                 className="flex cursor-pointer items-center gap-2 rounded-full border border-slate-200 p-1 pr-3 transition-colors hover:border-sky-300 hover:bg-slate-50 dark:border-slate-800 dark:hover:border-sky-800 dark:hover:bg-slate-900"
               >
                 <div className="h-9 w-9 overflow-hidden rounded-full bg-sky-100 dark:bg-sky-950">
@@ -88,13 +97,13 @@ const Navbar = () => {
                     <Image
                       width={36}
                       height={36}
-                      src={user?.image}
-                      alt={user?.name}
-                      className="?h-full w-full object-cover"
+                      src={user.image}
+                      alt={user.name || "Profile"}
+                      className="h-full w-full object-cover"
                     />
                   ) : (
                     <span className="flex h-full items-center justify-center font-semibold text-sky-600 dark:text-sky-400">
-                      {user?.name.charAt(0)}
+                      {user?.name?.charAt(0) || "U"}
                     </span>
                   )}
                 </div>
@@ -116,6 +125,7 @@ const Navbar = () => {
                   <span className="text-sm font-semibold text-slate-900 dark:text-white">
                     {user?.name}
                   </span>
+
                   <span className="text-xs font-normal text-slate-500">
                     Welcome to ServeUp
                   </span>
@@ -158,9 +168,12 @@ const Navbar = () => {
 
                 <div className="my-1 border-t border-slate-100 dark:border-slate-800" />
 
-                {/* TODO: Connect your authentication logout function. */}
+                {/* Logout */}
                 <li>
-                  <button onClick={handleLogout} className="gap-3 rounded-xl py-2.5 text-red-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30">
+                  <button
+                    onClick={handleLogout}
+                    className="gap-3 rounded-xl py-2.5 text-red-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950/30"
+                  >
                     <LogOut className="h-4 w-4" />
                     Logout
                   </button>
