@@ -4,6 +4,7 @@ import { CalendarDays, MapPin, ArrowLeft } from "lucide-react";
 import EventActions from "../EventActions";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { toast } from "react-toastify";
 
 const EventDetailsPage = async ({
   params,
@@ -24,9 +25,10 @@ const EventDetailsPage = async ({
 
   const token = tokenResponse?.token;
 
-  if (!token) {
-    throw new Error("Authentication token not found");
-  }
+ if (!token) {
+  toast.error("Please login first to join this event!");
+  return;
+}
 
   // Fetch event details
   const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/events/${id}`, {

@@ -58,16 +58,19 @@ export default function CreateEventPage() {
       creatorEmail: session?.user.email,
     };
 
-     const token = await getTokenFromClient()
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/events`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`
+    const token = await getTokenFromClient();
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/events`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+        body: JSON.stringify(eventData),
       },
-      credentials: "include",
-      body: JSON.stringify(eventData),
-    });
+    );
 
     if (!response.ok) {
       toast.error("Failed to create event.");
@@ -75,8 +78,11 @@ export default function CreateEventPage() {
     }
 
     toast.success("Event created successfully!");
-    // router.replace("/events");
+    form.reset();
 
+    setTimeout(() => {
+      router.push("/upcoming-events");
+    }, 1500);
   };
 
   return (
@@ -264,8 +270,7 @@ export default function CreateEventPage() {
               </button>
 
               <button
-                onClick={() => router.push("/upcoming-events")}
-
+                // onClick={() => router.push("/upcoming-events")}
                 type="submit"
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-sky-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-sky-600"
               >
