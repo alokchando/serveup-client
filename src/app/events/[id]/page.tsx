@@ -19,16 +19,16 @@ const EventDetailsPage = async ({
   });
 
   // Get JWT token from Better Auth
-  const tokenResponse = await auth.api.getToken({
-    headers: await headers(),
-  });
+  // const tokenResponse = await auth.api.getToken({
+  //   headers: await headers(),
+  // });
 
-  const token = tokenResponse?.token;
+  // const token = tokenResponse?.token;
 
- if (!token) {
-  toast.error("Please login first to join this event!");
-  return;
-}
+//  if (!session) {
+//   toast.error("Please login first to join this event!");
+//   return;
+// }
 
   // Fetch event details
   const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/events/${id}`, {
@@ -46,11 +46,11 @@ const EventDetailsPage = async ({
 
   if (session?.user?.email) {
     const joinedResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/events/joined/${encodeURIComponent(session.user.email)}`,
+      `${process.env.NEXT_PUBLIC_SERVER_URL}/events/joined/${(session.user.email)}`,
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
         cache: "no-store",
       },
     );
