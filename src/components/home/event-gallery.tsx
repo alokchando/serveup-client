@@ -4,6 +4,9 @@ import Image from "next/image";
 const PastEventGallery = async () => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/events/pastevents`,
+    {
+      cache: "no-store",
+    },
   );
 
   if (!response.ok) {

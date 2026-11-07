@@ -6,6 +6,9 @@ import { EventItem } from "@/lib/type";
 const RecentEvents = async () => {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_URL}/events/recent`,
+    {
+      cache: "no-store",
+    },
   );
 
   if (!response.ok) {
