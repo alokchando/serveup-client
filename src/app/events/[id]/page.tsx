@@ -30,9 +30,9 @@ const EventDetailsPage = async ({
 
   // Fetch event details
   const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/events/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    // headers: {
+    //   Authorization: `Bearer ${token}`,
+    // },
     cache: "no-store",
   });
 

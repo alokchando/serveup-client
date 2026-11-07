@@ -23,6 +23,10 @@ const JoinButton = ({
       const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
       const token = await getTokenFromClient();
+      if (!token) {
+        toast.error("Please login first to join this event!");
+        return;
+      }
 
       const url = `${serverUrl}/events/${eventId}/join`;
 
