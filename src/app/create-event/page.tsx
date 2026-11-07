@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -35,7 +34,7 @@ export default function CreateEventPage() {
     const formData = new FormData(form);
 
     const eventDate = new Date(
-      `${formData.get("eventDate")}T${formData.get("eventTime")}`
+      `${formData.get("eventDate")}T${formData.get("eventTime")}`,
     );
 
     if (isNaN(eventDate.getTime()) || eventDate <= new Date()) {
@@ -50,6 +49,8 @@ export default function CreateEventPage() {
       image: String(formData.get("image")).trim(),
       location: String(formData.get("location")).trim(),
       eventDate: eventDate.toISOString(),
+      creatorName: session.user.name,
+      creatorEmail: session.user.email,
     };
 
     setIsSubmitting(true);
@@ -66,7 +67,7 @@ export default function CreateEventPage() {
             authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(eventData),
-        }
+        },
       );
 
       if (!response.ok) {
@@ -118,7 +119,10 @@ export default function CreateEventPage() {
           </div>
 
           <div>
-            <label htmlFor="description" className="mb-2 block text-sm font-medium">
+            <label
+              htmlFor="description"
+              className="mb-2 block text-sm font-medium"
+            >
               Description
             </label>
             <textarea
@@ -133,7 +137,10 @@ export default function CreateEventPage() {
           </div>
 
           <div>
-            <label htmlFor="category" className="mb-2 block text-sm font-medium">
+            <label
+              htmlFor="category"
+              className="mb-2 block text-sm font-medium"
+            >
               Category
             </label>
             <select
@@ -169,7 +176,10 @@ export default function CreateEventPage() {
           </div>
 
           <div>
-            <label htmlFor="location" className="mb-2 block text-sm font-medium">
+            <label
+              htmlFor="location"
+              className="mb-2 block text-sm font-medium"
+            >
               Location
             </label>
             <input
@@ -184,7 +194,10 @@ export default function CreateEventPage() {
 
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
-              <label htmlFor="eventDate" className="mb-2 block text-sm font-medium">
+              <label
+                htmlFor="eventDate"
+                className="mb-2 block text-sm font-medium"
+              >
                 Event Date
               </label>
               <input
@@ -198,7 +211,10 @@ export default function CreateEventPage() {
             </div>
 
             <div>
-              <label htmlFor="eventTime" className="mb-2 block text-sm font-medium">
+              <label
+                htmlFor="eventTime"
+                className="mb-2 block text-sm font-medium"
+              >
                 Event Time
               </label>
               <input
